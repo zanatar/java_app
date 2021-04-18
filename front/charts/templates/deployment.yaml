@@ -35,7 +35,7 @@ spec:
                   # - name: production
                     # value: {{.Values.values.production }}
                   name: {{ .Values.containers.name }}
-                  image: "{{ .Values.containers.image }}:{{ .Values.imagetag }}"
+                  image: "{{ .Values.containers.image }}:latest"
                   volumeMounts:  
                   - name: {{ .Values.volumes.logstash.name }}
                     mountPath: {{ .Values.volumes.logstash.mountPath.nginx }}

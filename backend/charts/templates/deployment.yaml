@@ -43,7 +43,7 @@ spec:
                   - name: TCHALLENGE_MONGODB_DATABASE
                     value: {{ .Values.values.TCHALLENGE_MONGODB_DATABASE }}
                   name: {{ .Values.containers.name }}
-                  image: "{{ .Values.containers.image }}:{{ .Values.imagetag }}"
+                  image: "{{ .Values.containers.image }}:latest"
                   ports:
                     - containerPort: {{ .Values.containers.port }}
                     - containerPort: {{ .Values.containers.exporterPort }}
