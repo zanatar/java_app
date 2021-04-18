@@ -1,0 +1,195 @@
+<div id="outerGrid">
+
+    <h2 class="centerItem"> Статистика участника </h2>
+    
+    <div id="statistics">
+        <div>
+            <div *ngIf="!loading" id="block">
+                <h3 class="card-description">Средний результат</h3>
+                <h3 class="card-value">{{percentFormatter(stats.avgScore)}}</h3>
+                <div class="card-band"></div>
+            </div>
+            <ngx-loading [show]="loading"></ngx-loading>
+        </div>
+
+        <div>
+            <div *ngIf="!loading" id="block">
+                <h3 class="card-description">Тестов решено</h3>
+                <h3 class="card-value">{{stats.solvedWorkbooks}}</h3>
+                <div class="card-band bg-secondary"></div>
+            </div>
+            <ngx-loading [show]="loading"></ngx-loading>
+        </div>
+
+        <div>
+            <div *ngIf="!loading" id="block">
+                <h3 class="card-description">Количество задач</h3>
+                <h3 class="card-value">{{stats.totalProblemsSolved}}</h3>
+                <div class="card-band" style="background-color: #32cd8b"></div>
+            </div>
+            <ngx-loading [show]="loading"></ngx-loading>
+        </div>
+    </div>
+
+    <div id="statistics">
+        <div id="blockResult">
+            <div *ngIf="!loading" class="card-header">
+                Результаты тестов
+            </div>
+            <div *ngIf="!loading" class="card-body centerItem">
+                <ngx-charts-line-chart
+                        [results]="workbooksScores"
+                        yAxis="true"
+                        [view]="rowView"
+                        [showXAxisLabel]="true"
+                        [yAxisTickFormatting]="percentFormatter"
+                        [showYAxisLabel]="true"
+                        [scheme]="colorScheme">
+                    <ng-template #tooltipTemplate let-model="model">
+                        <h6 class="pt-3 pl-1 pr-1">Дата: {{workbooksScores[0].series[model.name].date}}</h6>
+                        <h6 class="pb-1">
+                            Результат: <span class="percent-value">{{percentFormatter(model.value)}}</span>
+                        </h6>
+                    </ng-template>
+                    <ng-template #seriesTooltipTemplate let-model="model">
+                        <h6 class="pt-3 pl-1 pr-1"> Дата: {{workbooksScores[0].series[model[0].name].date}}</h6>
+                        <h6 class="pb-1">
+                        Результат: <span class="percent-value">{{percentFormatter(model[0].value)}}</span> </h6>
+                    </ng-template>
+                </ngx-charts-line-chart>
+            </div>
+            <div *ngIf="loading" class="loading pl-0 pl-md-2 pr-0 pr-md-2">
+                <ngx-loading [show]="loading"></ngx-loading>
+            </div>
+            <div *ngIf="!loading" class="card-footer">
+                    История решения тестов
+            </div>
+        </div>
+        
+        <div id="blockResult">
+            <div *ngIf="!loading" class="card-header">
+                Результаты тестов по категориям
+            </div>
+            <div *ngIf="!loading" class="card-body centerItem">
+                <ngx-charts-bar-vertical
+                        [xAxis]="true"
+                        [showGridLines]="false"
+                        [view]="rowView"
+                        [yAxisTickFormatting]="percentFormatter"
+                        [showYAxisLabel]="true"
+                        [yAxis]="true"
+                        [scheme]="colorScheme"
+                        [results]="categoriesScores">
+                    <ng-template #tooltipTemplate let-model="model">
+                        <h6 class="pt-3 pl-1 pr-1">Категория: {{model.name}}</h6>
+                        <h6 class="pb-1">Результат: <span class="percent-value">{{percentFormatter(model.value)}}</span>
+                        </h6>
+                    </ng-template>
+                </ngx-charts-bar-vertical>
+            </div>
+            <div *ngIf="loading" class="loading pl-0 pl-md-2 pr-0 pr-md-2">
+                <ngx-loading [show]="loading"></ngx-loading>
+            </div>
+            <div *ngIf="!loading" class="card-footer">
+                Процент верных ответов на вопросы, сгрупированных по категориям
+            </div>
+        </div>
+
+        <div id="blockResult">
+            <div *ngIf="!loading" class="card-header">
+                Распределение категорий
+            </div>
+            <div *ngIf="!loading" class="card-body centerItem">
+                <ngx-charts-bar-vertical
+                        [view]="rowView"
+                        [yAxis]="true"
+                        [xAxis]="true"
+                        [showGridLines]="false"
+                        [scheme]="colorScheme"
+                        [yScaleMax]="stats ? stats.totalProblemsSolved : 0"
+                        [results]="categoriesNumber">
+                </ngx-charts-bar-vertical>
+            </div>
+            <div *ngIf="loading" class="loading pl-0 pl-md-2 pr-0 pr-md-2">
+                <ngx-loading [show]="loading"></ngx-loading>
+            </div>
+            <div *ngIf="!loading" class="card-footer">
+                Количество решенных вопросов, сгруппированных по категориям
+            </div>
+        </div>
+    </div>
+
+
+        <!--Пока сырое, но возможно пригодится-->
+    <!-- <div class="row ml-0 mr-0" *ngIf="false">
+        <div class="col-12 pl-0 pl-md-2 pr-0 pr-md-2">
+            <div class="card">
+                <div class="card-header">
+                    Тепловая карта тестов
+                </div>
+                <div class="card-body">
+                    <ngx-charts-heat-map
+                            [results]="calendarData"
+                            [xAxisTickFormatting]="calendarAxisTickFormatting"
+                            [tooltipText]="calendarTooltipText"
+                            [xAxis]="true"
+                            [scheme]="heatmapColors"
+                            [yAxis]="true"
+                            [view]="calendarRowView"
+                            [legend]="true">
+                    </ngx-charts-heat-map>
+                </div>
+            </div>
+
+        </div>
+    </div> -->
+
+    <div id="statisticsResult">
+
+        <div id="blockResult">
+            <div *ngIf="!loading" class="card-header">
+                Распределение тестов по специализации
+            </div>
+            <div *ngIf="!loading" class="card-body centerItem">
+                <ngx-charts-pie-chart
+                        [doughnut]="true"
+                        [results]="specsStats"
+                        [view]="halfRowView"
+                        [labels]="true">
+                </ngx-charts-pie-chart>
+            </div>
+            <div *ngIf="loading" class="loading pl-0 pl-md-2 pr-0 pr-md-2">
+                <ngx-loading [show]="loading"></ngx-loading>
+            </div>
+            <div *ngIf="!loading" class="card-footer">
+                Количество решенных тестов, сгруппированных по специализациям
+            </div>
+        </div>
+
+        <div id="blockResult">
+            <div *ngIf="!loading" class="card-header">
+                Распределение тестов по событиям
+            </div>
+            <div *ngIf="!loading" class="card-body centerItem">
+                <ngx-charts-pie-chart
+                        [results]="eventsStats"
+                        [doughnut]="true"
+                        [scheme]="colorScheme"
+                        [view]="halfRowView"
+                        [labels]="true">
+                </ngx-charts-pie-chart>
+            </div>
+            <div *ngIf="loading" class="loading pl-0 pl-md-2 pr-0 pr-md-2">
+                <ngx-loading [show]="loading"></ngx-loading>
+            </div>
+            <div *ngIf="!loading" class="card-footer">
+                Количество решенных тестов, сгруппированных по событиям
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="text-center pt-4" *ngIf="stats && stats.totalWorkbooks < 2">
+    <h1>Недостаточно данных для статистики.</h1>
+</div>

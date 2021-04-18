@@ -1,0 +1,60 @@
+<form id="outerGrid"
+    [formGroup]="signUpCtrl"
+    (ngSubmit)="onSignup(signupForm)" #signupForm="ngForm">
+    <div id="innerGrid">
+        <h3 class="font-weight-normal">Регистрация</h3>
+
+        <div class="form-group form">
+            <label class="input-label">Email
+            <input type="email" name="email" class="form-control" placeholder="example@mail.com"
+                    ngModel
+                    formControlName="email"
+                    required>
+            </label>
+            <div *ngIf="email.invalid && email.touched"
+                    class="alert alert-danger">
+                <div *ngIf="email.errors.required">
+                    Требуется заполнить email
+                </div>
+                <div *ngIf="email.errors.pattern">
+                    Некорректный email
+                </div>
+                <div *ngIf="email.errors?.emailNotTaken">
+                    Заданный email уже занят
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form">
+            <label class="input-label">Имя
+            <input type="text" name="quickname" class="form-control" placeholder="user"
+                    ngModel
+                    formControlName="quickname"
+                    required>
+            </label>
+            <div *ngIf="quickname.invalid && quickname.touched"
+                    class="alert alert-danger">
+                <div *ngIf="quickname.errors.required">
+                    Требуется заполнить имя
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block form"
+                [disabled]="signUpCtrl.invalid"
+                type="submit">Зарегистрироваться
+        </button>
+
+        <div class="checkbox" style="padding-top: 10px;">
+            <label>
+                <a routerLink="/login">Уже зарегистрированы?</a>
+            </label>
+        </div>
+
+        <div>
+            <label class="agree centerItem">Регистрируясь, вы принимаете
+                <a target="_blank" routerLink="/disclaimer">пользовательское соглашение</a>
+            </label>
+        </div>
+    </div>
+</form>

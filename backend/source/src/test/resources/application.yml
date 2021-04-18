@@ -1,0 +1,43 @@
+server:
+  port: ${TCHALLENGE_SERVICE_BACKEND_PORT:4567}
+spring:
+  mail:
+    host: ${TCHALLENGE_MAIL_SERVER:localhost}
+    username: ${TCHALLENGE_MAIL_USERNAME:info@t-challenge.ru}
+  sendgrid:
+    api-key: ${TCHALLENGE_SENDGRID_APIKEY:}
+
+
+tchallenge:
+  participant:
+    url: ${TCHALLENGE_SERVICE_PARTICIPANT_URL:http://localhost:4200}
+  coworker:
+    url: ${TCHALLENGE_SERVICE_COWORKER_URL:http://localhost:4300}
+  codemaster:
+    url: ${TCHALLENGE_SERVICE_CODEMASTER_URL:http://localhost:4568}
+  mail:
+    sendgrid-enabled: ${TCHALLENGE_SENDGRID_ENABLED:false}
+  proxy:
+    host: ${TCHALLENGE_PROXY_HOST:10.233.104.141}
+    port: ${TCHALLENGE_PROXY_PORT:3128}
+  workbook:
+    scoring:
+      strategy: ${TCHALLENGE_SCORING_STRATEGY:default}
+debug: false
+cloudinary:
+  cloud-name: ${TCHALLENGE_CLOUDINARY_CLOUD_NAME:t-challenge}
+  api-key: ${TCHALLENGE_CLOUDINARY_API_KEY:}
+  api-secret: ${TCHALLENGE_CLOUDINARY_API_SECRET:}
+
+schedule:
+  delay-time: ${TCHALLENGE_SHEDULE_DELAY_TIME:5000}
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+google:
+  client-id:
+
+vk:
+  secret-key:

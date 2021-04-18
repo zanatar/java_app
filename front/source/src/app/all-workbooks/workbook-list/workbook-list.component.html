@@ -1,0 +1,26 @@
+<div id = outerGrid>
+    <label class="std-padding">Фильтр
+        <input [ngModel]="filterText" (ngModelChange)="onFilterChanged($event)" class="form-control">
+    </label>
+
+    <hr>
+
+    <div *ngIf="workbooksData && (workbooksData.length != 0)"
+        (scroll)="onScrolled($event)">
+        <div *ngFor="let workbook of workbooksData | workbookFilter:filterText">
+            <div [id]="'workbook-' + workbooksData.indexOf(workbook)" [class.active]="workbook.active">
+                <app-workbook-item
+                        (click)="onWorkbookSelected(workbook)"
+                        [workbookInfo]="workbook">
+                </app-workbook-item>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div *ngIf="!workbooksData || (workbooksData.length == 0)">
+        <div class="text-center my-2">
+        <span>Решенных задач нет</span>
+        </div>
+    </div>
+</div>

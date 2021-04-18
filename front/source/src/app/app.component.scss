@@ -1,0 +1,35 @@
+#grid{
+    display: grid;
+    grid-template-rows: 60px 1fr 60px;
+    grid-template-columns: 1fr;
+    align-items: center;
+    height: auto;
+    min-height: 100%;
+}
+
+@media all and (max-width: 575px){
+    #grid{
+        grid-template-rows: 60px 1fr 75px;
+        grid-template-columns: 1fr;
+    }
+}
+
+#header{
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+#content{
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#footer{
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 1;
+}

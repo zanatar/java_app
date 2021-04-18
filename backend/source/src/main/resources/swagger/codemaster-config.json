@@ -1,0 +1,11 @@
+{
+  "apiPackage": "ru.tsystems.tchallenge.codemaster.api",
+  "modelPackage": "ru.tsystems.tchallenge.codemaster.model",
+  "invokerPackage": "ru.tsystems.tchallenge.codemaster",
+  "generateApiTests": false,
+  "additionalProperties": {
+    "sourceFolder": ".",
+    "basePackage": "ru.tsystems.tchallenge.codemaster",
+    "dateLibrary": "java8"
+  }
+}

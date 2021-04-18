@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ .Values.release.name }}-deployment
+    labels:
+        app: {{ .Values.appLabel }}
+spec:
+    replicas: {{ .Values.release.replicaCount }}
+    selector:
+        matchLabels:
+            app: {{ .Values.appLabel }}
+    template:
+        metadata:
+          annotations:            
+{{ toYaml .Values.prometeus_scrape | indent 12 }}
+          labels:
+            app: {{ .Values.appLabel }}
+        spec:
+            volumes:
+            - configMap:
+                defaultMode: {{ .Values.volumes.jmx.defaultMode }}
+                name: {{ .Values.volumes.jmx.configMap }}
+              name: {{ .Values.volumes.jmx.name }}
+            - configMap:
+                defaultMode: {{ .Values.volumes.promtail.defaultMode }}
+                name: {{ .Values.volumes.promtail.configMap }}
+              name: {{ .Values.volumes.promtail.name }}
+            - name: {{ .Values.volumes.logstash.name }}
+              emptyDir: {} 
+            imagePullSecrets:
+            - name: {{ .Values.containers.secret }}
+            - name: dockerhub
+            containers:
+                - env:
+                  - name: TCHALLENGE_MONGODB_HOST
+                    value: {{ .Values.values.TCHALLENGE_MONGODB_HOST }}
+                  - name: TCHALLENGE_MONGODB_PORT
+                    value: '27017'
+                  - name: TCHALLENGE_MONGODB_USERNAME
+                    value: {{ .Values.values.TCHALLENGE_MONGODB_USERNAME }}
+                  - name: TCHALLENGE_MONGODB_PASSWORD
+                    value: {{ .Values.values.TCHALLENGE_MONGODB_PASSWORD }}
+                  - name: TCHALLENGE_MONGODB_DATABASE
+                    value: {{ .Values.values.TCHALLENGE_MONGODB_DATABASE }}
+                  name: {{ .Values.containers.name }}
+                  image: "{{ .Values.containers.image }}:{{ .Values.imagetag }}"
+                  ports:
+                    - containerPort: {{ .Values.containers.port }}
+                    - containerPort: {{ .Values.containers.exporterPort }}
+                  volumeMounts:
+                    - mountPath: {{ .Values.volumes.jmx.mountPath }}
+                      name: {{ .Values.volumes.jmx.name }}
+                    - mountPath: {{ .Values.volumes.logstash.mountPath }}
+                      name: {{ .Values.volumes.logstash.name }}
+                  livenessProbe:
+                    httpGet:
+                      path: /metrics
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.livenessProbe | indent 20 }}                    
+                  readinessProbe:
+                    httpGet:
+                      path: /metrics
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.readinessProbe | indent 20 }} 
+
+                - name: {{ .Values.promtail.name }}
+                  image: {{ .Values.promtail.image }}
+                  volumeMounts:
+                    - mountPath: {{ .Values.volumes.promtail.mountPath }}
+                      name: {{ .Values.volumes.promtail.name }}
+                    - mountPath: {{ .Values.volumes.logstash.mountPath }}
+                      name: {{ .Values.volumes.logstash.name }}
+ 
+

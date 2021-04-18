@@ -1,0 +1,95 @@
+#outerGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#innerGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-content: center;
+  width: 1024px;
+}
+
+#fildsGrid{
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.centerItem{
+  justify-content: center;
+}
+
+@media (max-width: 1024px){
+  #innerGrid{
+    width: 760px;
+  }
+}
+
+@media (max-width: 768px){
+  #innerGrid{
+    width: 420px;
+  }
+  #fildsGrid{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 425px){
+  #innerGrid{
+    width: 310px;
+  }
+}
+
+.invalid {
+  border-color: red;
+  box-shadow: none;
+}
+
+.error {
+  color: red;
+}
+
+.required-field {
+  color: red;
+  float: right;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+
+.tab-name {
+  color: black;
+  padding-left: 2rem;
+  font-size: large;
+}
+
+.vertical-align span {
+  font-size: 1.2em;
+}
+
+.tab-header {
+  display: inline-flex;
+  vertical-align: middle;
+  color: black;
+}
+
+.tab-header i {
+  font-size: 30px;
+}
+
+.tab-header span {
+  font-size: 22px;
+}
+
+.agree {
+  font-size: 0.9em;
+  padding: 3px;
+
+}

@@ -1,0 +1,112 @@
+#outerGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#statistics{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 5px;
+  padding: 2.5px;
+  width: 100%;
+}
+
+#block{
+  border: solid #dedede 1px;
+  border-radius: 5px;
+  height: 200px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 110px 20px;
+  align-items: center;
+}
+
+#blockResult{
+  border: solid #dedede 1px;
+  border-radius: 5px;
+  height: 370px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 50px 1fr 70px;
+  align-items: center;
+}
+
+#statisticsResult{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 5px;
+  padding: 2.5px;
+}
+
+@media (max-width: 1120px){
+  #statistics{
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+@media (max-width: 790px){
+  #statistics{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3,1fr);
+    width: 100%;
+    font-size: 17px;
+  }
+  #statisticsResult{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    font-size: 17px;
+  }
+}
+
+.centerItem{
+  display: grid;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card-header{
+  height: 50px;
+}
+
+.card-footer{
+  height: 70px;
+  text-align: center;
+}
+// --------------------------------------------------------
+.card-description {
+  left: 20%;
+  font-size: 2em;
+  color: dimgrey;
+  margin-left: 10px;
+}
+
+.card-md-text{
+  font-size: 1.5em;
+  color: dimgrey;
+  margin-left: 10px;
+}
+
+.card-value {
+  left: 20%;
+  font-size: 5em;
+  color: dimgrey;
+  margin-left: 10px;
+}
+
+@media (max-width: 865px){
+  .card-description {
+    font-size: 1.5em;
+  }
+}
+
+.card-band {
+  width: 100%;
+  bottom: 0;
+  height: 20px;
+  border-radius: 0 0 0.25rem 0.25rem;
+  background-color: #ff8000;
+}

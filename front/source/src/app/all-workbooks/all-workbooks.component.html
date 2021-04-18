@@ -1,0 +1,33 @@
+<div id = outerGrid>
+
+    <div [hidden]="!hasEnoughWidth() && displayFullInfo" id = block>
+        <app-workbook-list
+                [onMobile]="!hasEnoughWidth()"
+        ></app-workbook-list>
+    </div>
+
+    <div [hidden]="!hasEnoughWidth() && !displayFullInfo" id = block>
+        <div class="areaCenter">
+            <div *ngIf="!displaySolution">
+                <app-workbook-result
+                [listDetail]="true"
+                [workbookInfo]="workbookInfo">
+                </app-workbook-result>
+            </div>
+            <div *ngIf="displaySolution">
+                <app-workbook-view
+                [listDetail]="true"
+                [workbook]="workbookInfo.workbook">
+                </app-workbook-view>
+            </div>
+            <div class="d-md-none bc-button" >
+                <button class="btn btn-lg btn-outline-secondary back-button"
+                        (click)="goBack()"
+                        type="button">
+                        Назад
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ .Values.release.name }}-deployment
+    labels:
+        app: {{ .Values.appLabel }}
+spec:
+    replicas: {{ .Values.release.replicaCount }}
+    selector:
+        matchLabels:
+            app: {{ .Values.appLabel }}
+    template:
+        metadata:
+          annotations:
+{{ toYaml .Values.prometeus_scrape | indent 12 }}           
+          labels:
+            app: {{ .Values.appLabel }}
+        spec:
+            imagePullSecrets:
+                  - name: dockerhub
+                  - name: {{ .Values.containers.secret }}
+            volumes: 
+            - name: {{ .Values.volumes.logstash.name }}
+              emptyDir: {} 
+            - configMap:
+                defaultMode:  {{ .Values.volumes.config.defaultMode }}
+                name: {{ .Values.volumes.config.configMap }}
+              name: {{ .Values.volumes.config.name }}
+            containers:
+                - env:
+                  - name: apiBaseUrl
+                    value: {{.Values.values.apiBaseUrl }}
+                  - name: clientBaseUrl
+                    value: {{.Values.values.clientBaseUrl }}
+                  # - name: production
+                    # value: {{.Values.values.production }}
+                  name: {{ .Values.containers.name }}
+                  image: "{{ .Values.containers.image }}:{{ .Values.imagetag }}"
+                  volumeMounts:  
+                  - name: {{ .Values.volumes.logstash.name }}
+                    mountPath: {{ .Values.volumes.logstash.mountPath.nginx }}
+                  ports:
+                    - containerPort: {{ .Values.containers.port }}
+                  livenessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.livenessProbe | indent 20 }}                    
+                  readinessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.readinessProbe | indent 20 }} 
+                
+                - env:
+                  - name: nginx.scrape-uri
+                    value: http://localhost:8080/stub_status
+                  name: {{ .Values.exporter.name }}
+                  image: {{ .Values.exporter.image }}
+                  ports:
+                    - containerPort: {{ .Values.exporter.port }}
+                - name: {{ .Values.promtail.name }}
+                  image: {{ .Values.promtail.image }}
+                  volumeMounts:
+                  - mountPath: {{ .Values.volumes.logstash.mountPath.nginx }}
+                    name: {{ .Values.volumes.logstash.name }}
+                  - mountPath: {{ .Values.volumes.config.mountPath }}
+                    name: {{ .Values.volumes.config.name }} 
+

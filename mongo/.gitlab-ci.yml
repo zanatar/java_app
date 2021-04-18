@@ -1,0 +1,83 @@
+stages:
+    - deploy
+    - publishing
+    - restore
+
+.template: 
+    - &tags
+        tags:
+            - localhost
+    - &before_script
+         before_script:
+           - export BRANCH=$(echo $CI_COMMIT_BRANCH | awk -F"-" '{print $1}')
+
+deploy:from_charts:
+    stage: deploy
+    tags:
+        - t-sys_cloud
+    <<: *before_script
+    script:
+        - oc login https://openshift.devops.t-systems.ru:8443 -u zanatar -p $OC_PASS --insecure-skip-tls-verify
+        - oc project tchallenge-$BRANCH || oc new-project tchallenge-$BRANCH
+        - helm upgrade -i mongo ./charts/ --values ./charts/values-$BRANCH.yaml --reset-values
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+        - when: always
+
+publishing:helm_repo_update:
+    stage: publishing
+    needs:
+        - deploy:from_charts
+    <<: *tags
+    <<: *before_script
+    image: registry.gitlab.com/zanatar/image-for-cronjob/helm-oc
+    script:
+        - git clone https://github.com/zanatar/t-system-tchallenge-helm-repo
+        - mv charts/values-$BRANCH.yaml charts/values.yaml
+        - helm package -u charts/
+        - cp mongo* t-system-tchallenge-helm-repo/$BRANCH/
+        - cd t-system-tchallenge-helm-repo/$BRANCH/
+        - helm repo index . --url https://zanatar.github.io/t-system-tchallenge-helm-repo/$BRANCH
+        - git config --global user.email "leokern@rambler.ru"
+        - git config --global user.name "zanatar"
+        - git add *
+        - git commit -m "mongo test message"
+        - git push https://zanatar:$GITHUB_ACCESS_TOKEN@github.com/zanatar/t-system-tchallenge-helm-repo.git
+    rules:
+        - changes:
+            - charts/*
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+
+deploy:from_repo:
+    stage: deploy
+    tags:
+        - t-sys_cloud
+    <<: *before_script
+    script:
+        - oc login https://openshift.devops.t-systems.ru:8443 -u zanatar -p $OC_PASS --insecure-skip-tls-verify
+        - oc project tchallenge-$BRANCH || oc new-project tchallenge-$BRANCH
+        - helm repo remove $BRANCH || echo 1
+        - helm repo add $BRANCH https://zanatar.github.io/t-system-tchallenge-helm-repo/$BRANCH
+        - helm repo update
+        - export VERSION=$(awk -F:" " '/version/ {print $2}'  charts/Chart.yaml)
+        - echo $VERSION
+        - helm upgrade -i mongo $BRANCH/mongo --version $VERSION --reset-values
+    when: manual
+
+restore_current_commit:
+    stage: restore
+    <<: *tags
+    image: registry.gitlab.com/zanatar/image-for-cronjob/helm-oc
+    <<: *before_script
+    script:
+        - git clone git@gitlab.com:tchallenge-zanatar/tchallenge-mongo.git
+        - cd tchallenge-mongo
+        - git checkout $CI_COMMIT_SHORT_SHA
+        - git checkout -b $BRANCH-$CI_COMMIT_SHORT_SHA
+        - git push origin $BRANCH-$CI_COMMIT_SHORT_SHA
+    when: manual
+
+
+

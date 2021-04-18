@@ -1,0 +1,113 @@
+<div *ngIf="problemWithSolution.problem.options" id="outerGrid">
+
+    <div>
+
+        <div *ngIf="hasOptions()" class="pl-1">
+            <div class="custom-control mb-1"
+                 [class.custom-radio]="(problemWithSolution.problem.expectation === 'SINGLE')"
+                 [class.custom-checkbox]="problemWithSolution.problem.expectation === 'MULTIPLE'"
+                 *ngFor="let option of problemWithSolution.problem.options">
+                <input [id]="problemWithSolution.problem.id + option.index"
+                       class="custom-control-input"
+                       [type]="typeByExpectation()"
+                       [checked]="option.checked"
+                       [value]="option.index"
+                       [disabled]="!classified"
+                       (change)="onOptionChanged(option.index)">
+                <label [for]="problemWithSolution.problem.id + option.index"
+                       [ngClass]="{'custom-control-label' : true,
+                       'correct' : option.correct,
+                       'checked' : option.checked,
+                       'correct-answer': option.correct && option.checked,
+                       'wrong-answer': (!option.correct) && option.checked}">
+                    <span [ngClass]="{'correct' : option.correct && (!classified)}">{{option.textcode}}: {{option.content}}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="problemWithSolution.problem.expectation === 'TEXT'" id = text>
+            <label>
+                Решение
+                <input class="form-control" (blur)="onOptionChanged(0)"
+                       [disabled]="!classified"
+                       [class.incorrect-text]="!classified && !isSolutionCorrect()"
+                       [class.correct-text]="!classified && isSolutionCorrect()"
+                       [(ngModel)]="problemWithSolution.solution">
+            </label>
+            <p *ngIf="!classified && !isSolutionCorrect()">
+                Ответ: {{problemWithSolution.problem.options[0].content}}
+            </p>
+        </div>
+
+        <div *ngIf="problemWithSolution.problem.expectation === 'CODE'" id="code">
+            <p>Язык задачи: {{codeLanguageService.getLanguageName(problemWithSolution.codeSolution.language)}}</p>
+            <ngx-codemirror class="codemirror" *ngIf="classified" id ="codemirrorEditor"
+                [(ngModel)]="problemWithSolution.codeSolution.code"
+                [options]="{lineNumbers: true, matchBrackets: true, theme: 'material', mode: codeLanguageService.getCodemirrorModeByLanguage(problemWithSolution.codeSolution.language) }"
+                (focusChange) = "onEditorFocusChange()"
+            ></ngx-codemirror>       
+            <ngx-codemirror class="codemirror" *ngIf="!classified && submissionResult" id ="codemirrorEditorRO"
+                [(ngModel)]="problemWithSolution.codeSolution.code"
+                [options]="{lineNumbers: true, matchBrackets: true, readOnly: true, theme: 'default', mode: codeLanguageService.getCodemirrorModeByLanguage(problemWithSolution.codeSolution.language) }"
+             ></ngx-codemirror>   
+            <div *ngIf="!classified && !submissionResult" class="alert alert-danger">
+                Решение отсутствует
+            </div>
+            <br/>
+            <div *ngIf="submissionResult">
+                <div class="alert alert-warning" *ngIf="isWaitingStatus(submissionResult.status)">
+                    {{submissionResult.status}}
+                </div>
+                <div class="alert alert-danger" *ngIf="isErrorStatus(submissionResult.status)">
+                    <p>{{submissionResult.status}}
+                    </p>
+                    <div *ngIf="submissionResult.cmpErr">
+                       <code highlight [code]="decode(submissionResult.cmpErr)"></code>
+                    </div>
+                    <p *ngIf="submissionResult.languageName">Версия языка: {{submissionResult.languageName}}</p>
+                    <p *ngIf="submissionResult.time > 0">Время исполнения: {{timeFormatting(submissionResult.time)}}</p>
+                    <p *ngIf="submissionResult.memory">Использовано памяти:
+                        {{memoryFormatter(submissionResult.memory)}}</p>
+                </div>
+                <div class="alert alert-success" *ngIf="isOkStatus(submissionResult.status)">
+                    <p>{{submissionResult.status}}</p>
+                    <p *ngIf="submissionResult.languageName">Версия языка: {{submissionResult.languageName}}</p>
+                    <p *ngIf="submissionResult.time">Время исполнения: {{timeFormatting(submissionResult.time)}}</p>
+                    <p *ngIf="submissionResult.memory">Использовано памяти:
+                        {{memoryFormatter(submissionResult.memory)}}</p>
+                </div>
+            </div>
+
+            <div *ngIf = "enableTestRunButton" class="button">
+                <button (click)="backToLastSuccessful()"
+                        *ngIf="showBackToSuccessfulBtn()"
+                        class="btn btn-outline-success vertical-align tests">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                        <defs>
+                            <style>
+                                .a {
+                                    fill: none;
+                                }
+                            </style>
+                        </defs>
+                        <title>reset_outline</title>
+                        <rect class="a" width="64" height="64"></rect>
+                        <path d="M43,17.5H18V6L5,19,18,32V20.5H43a11.5,11.5,0,0,1,0,23H35a1.5,1.5,0,0,0,0,3h8a14.5,14.5,0,0,0,0-29Z"></path>
+                    </svg>
+
+                    <span>Вернуть успешное решение</span>
+                </button>
+                <button (click)="compileCode()"
+                        [disabled]="!problemWithSolution.codeSolution.code || !problemWithSolution.codeSolution.language || testRunning"
+                        *ngIf="classified"
+                        class="btn btn-outline-success vertical-align tests">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                        <path fill="none" d="M0 0H64.001V64H0z"></path>
+                        <path d="M18.001,11l32,21l-32,21V11z"></path>
+                    </svg>
+                    <span>Запустить тесты</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

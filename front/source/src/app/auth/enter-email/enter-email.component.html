@@ -1,0 +1,36 @@
+<div class="std-container-width row h-100 pt-6 justify-content-center align-items-center">
+  <div class="col-sm-12 col-md-6 pl-0 pr-0 mx-auto">
+    <div class="card">
+      <div class="card-body" style="padding-bottom: 0">
+        <form class="form-signin text-center mx-auto" [formGroup]="emailFormCtrl"
+              (ngSubmit)="this.onEnteredEmail(emailForm)" #emailForm="ngForm">
+          <h3 class="mb-3 font-weight-normal">Введите email</h3>
+          <div class="form-group">
+            <label class="input-label">Email
+              <input name="email" type="email" class="form-control"
+                     placeholder="example@mail.com"
+                     formControlName="email"
+                     ngModel
+                     required>
+            </label>
+            <div *ngIf="email.invalid && email.touched"
+                 class="alert alert-danger">
+              <div *ngIf="email.errors.required">
+                Необходимо заполнить email
+              </div>
+              <div *ngIf="email.errors.pattern">
+                Некорректный email
+              </div>
+              <div *ngIf="email.errors?.emailNotTaken">
+                Заданный email уже занят
+              </div>
+            </div>
+          </div>
+          <button [disabled]="email.invalid" class="btn btn-lg btn-primary btn-block" type="submit">
+            Продолжить
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

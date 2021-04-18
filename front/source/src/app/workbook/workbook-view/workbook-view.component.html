@@ -1,0 +1,53 @@
+<div *ngIf="workbook" id = "outerGrid">
+
+    <div *ngIf="workbook.status === submitted" id = waitingScreen>
+        <p>Ваши ответы приняты.</p>
+        <p>Скоро будут результаты...</p>
+        <app-waiting-logo></app-waiting-logo>
+    </div>
+
+    <div *ngIf="workbook.status !== submitted" id = innerGrid>
+        <div id = assignment>
+            <app-assignment *ngFor="let assignment of workbook.assignments"
+                            [last]="assignment.index == workbook.assignments.length"
+                            [assignment]="assignment"
+                            [listDetail]="listDetail"
+                            [classified]="(workbook.status !== submitted && workbook.status !== assessed) || (workbook.status == null)"
+                            [workbookId]="workbook.id">
+            </app-assignment>
+        </div>
+
+        <div>
+            <button *ngIf="workbook.status !== submitted && workbook.status !== assessed"
+                    class="btn btn-outline-primary"
+                    (click)="onSubmit($event)">
+                <div class="vertical-align submit-font sendButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                        <path fill="none" d="M0 0H64.001V64H0z"></path>
+                        <path d="M44.001,54h-24c-2.209,0-4,1.791-4,4s1.791,4,4,4h24c2.209,0,4-1.791,4-4S46.21,54,44.001,54z M32.001,2 l-14,14h10v30C28,48.209,29.791,50,32,50s4-1.791,4.001-4V16h10L32.001,2z"></path>
+                    </svg>
+
+                    <span> Отправить на проверку </span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div>
+        <button *ngIf="!listDetail && (workbook.status === assessed)"
+                class="btn btn-lg btn-outline-secondary btn-block centered-item"
+                [routerLink]="['/workbooks', workbook.id, 'result']">
+            <div class="vertical-align">
+                <span>Посмотреть результат</span>
+            </div>
+        </button>  
+
+        <button *ngIf="listDetail && (workbook.status === assessed)"
+                class="btn btn-lg btn-outline-secondary btn-block centred-item"
+                (click)="this.viewResult()">
+            <div class="vertical-align">
+                <span>Посмотреть результат</span>
+            </div>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="pointer workbook-item-padding">
+    <strong>{{workbookInfo.eventCaption}}</strong>
+    <div *ngIf="workbookInfo.workbook.assessedAt">
+        <small>Результат: {{formatResult()}}</small>
+        <br>
+        <small>Отправлено: {{formatAssessedAt()}}</small>
+    </div>
+    <div *ngIf="!workbookInfo.workbook.assessedAt">
+        <small>Можно решать до: {{formatEndDate()}}</small>
+    </div>
+</div>
+
+
+

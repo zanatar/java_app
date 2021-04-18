@@ -1,0 +1,69 @@
+@import "~app/user-statistics/user-statistics.component";
+
+#outerGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+#styleH2{
+  display: grid;
+  justify-items: center;
+  max-height: 50px;
+  margin-top: 10px;
+}
+
+#styleButton{
+  display: grid;
+  justify-items: center;
+  max-height: 50px;
+}
+
+#blockGrid{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+}
+
+#block{
+  border: solid #dedede 1px;
+  border-radius: 5px;
+  height: 200px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 110px 1fr 20px;
+  align-items: center;
+}
+
+#workbookQR{
+  display: grid;
+  justify-items: center;  
+}
+
+.bg-purple {
+  background-color: #5a2e63;
+}
+
+.card-icon {
+  font-size: 75px;
+  color: green;
+  margin-left: 1rem;
+  fill: green;
+}
+
+@media (max-width: 768px){
+  #blockGrid{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding: 10px;
+  }
+}

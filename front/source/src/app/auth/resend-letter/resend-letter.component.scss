@@ -1,0 +1,26 @@
+#outerGrid{
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    height: 100%;
+  }
+  
+  #innerGrid{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+  }
+  
+  .form{
+    width: 310px;
+  }
+  
+  .centerItem{
+    display: grid;
+    justify-items: center;
+  }
+
+.alert {
+    padding: 5px;
+    margin-top: 5px;
+}

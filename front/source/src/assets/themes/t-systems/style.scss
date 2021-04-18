@@ -1,0 +1,14 @@
+$primary: #E20074;
+$secondary: #0a5adb;
+$component-active-bg: $secondary;
+$btn-disabled-opacity: 0.4;
+$input-placeholder-color: #adb5bd;
+$danger: #d90000;
+$success: #28a745;
+
+
+ngb-accordion {
+  .card-header a {
+    text-decoration: none;
+  }
+}

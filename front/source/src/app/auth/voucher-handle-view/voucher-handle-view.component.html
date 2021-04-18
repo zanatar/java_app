@@ -1,0 +1,54 @@
+<div *ngIf="voucher" id="outerGrid">
+    <form  [formGroup]="voucherCtrl"
+            (ngSubmit)="verify(voucherForm)" #voucherForm="ngForm">
+        <div id="innerGrid">
+            <h3 class="font-weight-normal">
+                {{voucher.accountVerified? 'Восстановление аккаунта' : 'Подтверждение аккаунта '}}
+            </h3>
+
+            <p>Задайте {{voucher.accountVerified ? 'новый ' : ''}}пароль</p>
+
+            <div class="form-group form">
+                <input disabled class="form-control" [value]="voucher.accountEmail">
+            </div>
+
+            <div class="form-group form">
+                <input type="password" name="password" class="form-control" placeholder="Пароль"
+                        ngModel
+                        formControlName="password"
+                        required>
+                <div *ngIf="password.invalid && voucherCtrl.touched"
+                        class="alert alert-danger">
+                    <div *ngIf="password.errors.required">
+                        Требуется заполнить пароль
+                    </div>
+                    <div *ngIf="password.errors.minlength">
+                        Пароль должен содержать не менее 5 символов
+                    </div>
+                    <div *ngIf="password.errors.maxlength">
+                        Пароль должен содержать не более 30 символов
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group form">
+                <input type="password" name="passwordTwice" class="form-control"
+                        placeholder="Пароль еще раз"
+                        ngModel
+                        formControlName="passwordTwice"
+                        required>
+                <div *ngIf="voucherCtrl.errors?.passwordEq && voucherCtrl.touched
+                && passwordTwice.touched"
+                        class="alert alert-danger">
+                    <div *ngIf="voucherCtrl.errors?.passwordEq ">
+                        Пароли не совпадают
+                    </div>
+                </div>
+            </div>
+
+            <button [disabled]="voucherForm.invalid" class="btn btn-lg btn-primary btn-block form" type="submit">
+                Войти
+            </button>
+        </div>
+    </form>
+</div>

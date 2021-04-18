@@ -1,0 +1,53 @@
+server:
+  port: ${TCHALLENGE_SERVICE_BACKEND_PORT:4567}
+spring:
+  data:
+    mongodb:
+      database: ${TCHALLENGE_MONGODB_DATABASE:tchallenge}
+      port: ${TCHALLENGE_MONGODB_PORT:27017}
+      host: ${TCHALLENGE_MONGODB_HOST:localhost}
+      username: ${TCHALLENGE_MONGODB_USERNAME:user}
+      password: ${TCHALLENGE_MONGODB_PASSWORD:bzZbgg71}
+      authentication-database: ${TCHALLENGE_MONGODB_AUTHDB:admin}
+  mail:
+    host: ${TCHALLENGE_MAIL_SERVER:localhost}
+    username: ${TCHALLENGE_MAIL_USERNAME:info@t-challenge.ru}
+  sendgrid:
+    api-key: ${TCHALLENGE_SENDGRID_APIKEY:sendgrid-secret}
+    proxy:
+      host: ${TCHALLENGE_PROXY_HOST:}
+      port: ${TCHALLENGE_PROXY_PORT:}
+
+tchallenge:
+  participant:
+    url: ${TCHALLENGE_SERVICE_PARTICIPANT_URL:http://localhost:4200}
+  coworker:
+    url: ${TCHALLENGE_SERVICE_COWORKER_URL:http://localhost:4300}
+  codemaster:
+    url: ${TCHALLENGE_SERVICE_CODEMASTER_URL:http://localhost:4568}
+  mail:
+    sendgrid-enabled: ${TCHALLENGE_SENDGRID_ENABLED:true}
+  proxy:
+    host: ${TCHALLENGE_PROXY_HOST:}
+    port: ${TCHALLENGE_PROXY_PORT:}
+  workbook:
+    scoring:
+      strategy: ${TCHALLENGE_SCORING_STRATEGY:default}
+debug: false
+cloudinary:
+  cloud-name: ${TCHALLENGE_CLOUDINARY_CLOUD_NAME:dclw81zab}
+  api-key: ${TCHALLENGE_CLOUDINARY_API_KEY:452786978588947}
+  api-secret: ${TCHALLENGE_CLOUDINARY_API_SECRET:cloudinary-secret}
+
+schedule:
+  delay-time: ${TCHALLENGE_SHEDULE_DELAY_TIME:10000}
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: INFO
+
+google:
+  client-id: ${GOOGLE_CLIENT_ID:}
+
+vk:
+  secret-key: ${VK_SECRET_KEY:vk-secret}

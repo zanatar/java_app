@@ -1,0 +1,105 @@
+<div id = "outerGrid">
+<!-- Mobile -------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <div *ngIf="onMobile()" id = mobileGrid>
+        
+        <div class="dropdown ">
+            <button *ngIf="authenticated" class="button-on-full btn-brandbar" type="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="26" viewBox="0 0 29 26">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M5 8h17M5 13h17M5 18h17"></path>
+                </svg>
+            </button>
+            <div id="ProfileMenu">
+                <ul class="dropdown-menu">
+                    <li class="nav-item dropdown-item" *ngIf="authenticated">
+                        <a class="nav-link on-list-color" routerLink="/">Тест<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown-item" *ngIf="authenticated">
+                        <a class="nav-link on-list-color" routerLink="/workbooks">Решенные задачи</a>
+                    </li>
+                    <li class="nav-item dropdown-item" *ngIf="authenticated">
+                        <a class="nav-link on-list-color" routerLink="/statistics">Статистика</a>
+                    </li>
+                    <li class="nav-item dropdown-item" *ngIf="authenticated">
+                        <a class="nav-link on-list-color" routerLink="/profile">Профиль</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <img height="30px" src="./assets/images/logo.png">
+        </div>
+
+        <ul class="navbar-nav">
+                <li class="nav-item on-bar-color" *ngIf="authenticated">
+                    <a class="nav-link" (click)="onLogout()">Выйти</a>
+                </li>
+        </ul>
+        
+    </div>         
+<!-- Desctop -------------------------------------------------------------------------------------------------------------------------------------------------------- --> 
+    <div *ngIf="!onMobile()" id = desctopGrid>
+        <div>
+            <div>
+                    <img height="40px" src="./assets/images/logo.png">
+            </div>
+        </div>
+
+        <div class="desctopButtons"> 
+            <div>
+                <div>
+                    <ul class="brandnav-lvl-1 navbar-nav" *ngIf="authenticated">
+                        <li class="nav-item nav-item-lvl-1">
+                            <a class="nav-link on-bar-color" routerLink="/">Тест</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <ul class="brandnav-lvl-1 navbar-nav" *ngIf="authenticated">
+                        <li *ngIf="hasWorkbooks | async" class="nav-item nav-item-lvl-1">
+                            <a class="nav-link on-bar-color" routerLink="/workbooks">Решенные задачи</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <ul class="brandnav-lvl-1 navbar-nav" *ngIf="authenticated">
+                        <li *ngIf="hasStatistics" class="nav-item nav-item-lvl-1">
+                            <a class="nav-link on-bar-color" routerLink="/statistics">Статистика</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="justRight">
+            <div class="dropdown">
+                <button *ngIf="authenticated" class="button-on-full" type="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                        <path fill="none" d="M0 0H64.001V64H0z"></path>
+                        <path fill="#ffffff" d="M16.005,36c0,0.55-0.45,1-1,1h-8c-0.55,0-1-0.45-1-1v-8c0-0.55,0.45-1,1-1h8c0.55,0,1,0.45,1,1V36z M58.005,28c0-0.55-0.45-1-1-1h-8c-0.55,0-1,0.45-1,1v8c0,0.55,0.45,1,1,1h8c0.55,0,1-0.45,1-1V28z M37.005,28c0-0.55-0.45-1-1-1 h-8c-0.55,0-1,0.45-1,1v8c0,0.55,0.45,1,1,1h8c0.55,0,1-0.45,1-1V28z"></path>
+                    </svg>
+                </button>
+                <div id="ProfileMenu">
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li class="nav-item dropdown-item" *ngIf="authenticated">
+                            <a class="nav-link on-list-color" routerLink="/profile">Профиль</a>
+                        </li>
+                        <li class="nav-item dropdown-item" *ngIf="authenticated">
+                            <a class="nav-link on-list-color" (click)="onLogout()">Выйти</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,38 @@
+<div id = outerGrid
+     [ngClass]="{'solved': solved,
+                'wrong': wrong,
+                'list-detail': listDetail}">
+
+    <div class="assignment-title"> Задача {{assignment.index}} </div>
+
+    <div id = textGrid *ngIf="assignment.problem.introduction">{{assignment.problem.introduction}}</div>
+
+    <div id = textGrid>{{assignment.problem.question}}</div>
+
+    <div *ngIf="assignment.problem.snippets" class="highliter">
+        <div *ngFor="let snippet of assignment.problem.snippets">
+            <ngx-codemirror class="codemirror"
+                [(ngModel)]="snippet.content"
+                [options]="{lineNumbers: true, matchBrackets: true, readOnly: true, theme: 'default', mode: codeLanguageService.getCodemirrorModeByLanguage(snippet.style) }"
+            ></ngx-codemirror>   
+        </div>
+
+    </div>
+
+    <div *ngIf="assignment.problem.images">
+        <div class="problem-image" *ngFor="let image of assignment.problem.images">
+            <div *ngIf="image.url">
+                <img [src]="image.url">
+                <p>{{image.name}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div [id]="'assignment' + assignment.index"> -->
+    <div id = options>   
+        <app-option-group
+                [problemWithSolution]="assignment" [assignmentIndex]="assignment.index"
+                [workbookId]="workbookId" [classified]="classified"></app-option-group>
+    </div>
+
+</div>

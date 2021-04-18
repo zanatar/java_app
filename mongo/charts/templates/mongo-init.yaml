@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  init.js: "db = db.getSiblingDB(\"admin\")\r\n\r\ndb.createUser(\r\n    {\r\n    user: \"user\",\r\n    pwd: \"bzZbgg71\",\r\n    roles: [ { role: \"readWrite\", db: \"tchallenge\" } ]\r\n    }\r\n )\r\ndb = db.getSiblingDB(\"tchallenge\")\r\n\r\n\r\ndb.createCollection(\"accounts\")\r\n\r\ndb.accounts.insert({\r\n  \"_id\": ObjectId(\"5b927bef3c30463164dbfb40\"),\r\n  \"email\": \"user@user.com\",\r\n  \"passwordHash\": \"$2a$10$wJWbvG77RDEJp90KzTHxfure.84Ee4HbA6L0w/a1v40ArXR8N/CtK\",\r\n  \"category\": \"PARTICIPANT\",\r\n  \"roles\": [\r\n    \"PARTICIPANT\"\r\n  ],\r\n  \"status\": \"APPROVED\",\r\n  \"personality\": {\r\n    \"firstname\": null,\r\n    \"lastname\": null,\r\n    \"middlename\": null,\r\n    \"quickname\": \"User\"\r\n  },\r\n  \"participantPersonality\": {\r\n    \"essay\": null,\r\n    \"linkedin\": null,\r\n    \"hh\": null,\r\n    \"github\": null,\r\n    \"bitbucket\": null,\r\n    \"website\": null\r\n  },\r\n  \"registeredAt\": ISODate(\"2018-07-07T11:07:56.063Z\"),\r\n  \"createdAt\": ISODate(\"2018-07-07T11:07:56.063Z\"),\r\n  \"lastModifiedAt\": ISODate(\"2018-07-07T11:07:56.063Z\")\r\n})\r\n\r\n\r\n"
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.serviceName }}
+  namespace: {{ .Values.namespace }}
+

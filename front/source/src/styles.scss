@@ -1,0 +1,195 @@
+@import "assets/themes/t-systems/style";
+@import "../node_modules/codemirror/lib/codemirror";
+@import "../node_modules/codemirror/theme/material";
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    background: #ffffff;
+    margin: 0;
+}
+
+#mainGrid{
+    width: auto;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+router-outlet {
+    display: none;
+}
+
+.width-hund{
+    width: 100%;
+}
+
+.submit-font{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.separated-vertical-block {
+
+    margin-top: 30px;
+}
+
+.centered-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.block-title {
+
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.standard-form-field {
+
+    width: 80%;
+    max-width: 300px;
+}
+
+@media only screen and (min-width: 768px) {
+
+    .standard-form-field {
+
+        max-width: 400px;
+    }
+}
+
+.vertical-align {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.vertical-align span {
+    padding-left: 0.75rem !important;
+}
+
+.pt-6 {
+    padding-top: 4rem;
+}
+
+.input-label {
+    width: 100%;
+    text-align: start;
+}
+
+.container {
+    max-width: 100%;
+
+    @media (max-width: 767px) {
+        padding: 0;
+    }
+}
+
+.brandbar .container, .navbar .container {
+    max-width: none;
+}
+
+.std-container-width {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .std-container-width {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .std-container-width {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .std-container-width {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .std-container-width {
+        max-width: 1140px;
+    }
+}
+
+.btn-outline-danger {
+    fill: $danger;
+}
+
+.btn-outline-success {
+    fill: $success;
+}
+
+.btn-outline-primary {
+    fill: $primary;
+}
+
+.btn-outline-secondary {
+    fill: $secondary;
+    color: #0a5adb;
+    border-color: #0a5adb;
+    &:hover:not(.disabled):not(:disabled), &:active:not(.disabled):not(:disabled) {
+        color: #ffffff;
+        border-color: $secondary;
+        background-color: $secondary;
+    }
+}
+
+.btn:hover:not(:disabled) {
+    fill: white;
+}
+
+.btn svg {
+    transition: fill .15s ease-in-out;
+}
+
+.btn-lg, .btn.vertical-align span {
+    line-height: 1.2;
+}
+
+.brand-navbar {
+    min-height: 4rem;
+}
+
+@media (max-width: 767px) {
+    .brand-navbar {
+        height: 4rem;
+    }
+}
+
+.modal {
+    z-index: 1075;
+}
+
+.stat .card {
+    .backdrop {
+        z-index: 1000;
+    }
+
+    .spinner-circle {
+        z-index: 1001;
+    }
+}
+
+.custom-control-label::before {
+    pointer-events: auto;
+}
+
+.form-control:not(:disabled):hover {
+    background-color: #fff;
+}

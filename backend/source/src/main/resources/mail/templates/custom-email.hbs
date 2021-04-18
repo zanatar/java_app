@@ -1,0 +1,49 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .content {
+            font-size: 11.0pt;
+            font-family: "Calibri", sans-serif;
+            color: #1f497d;
+        }
+
+        .signature {
+            padding-top: 2rem;
+            font-size: 8.0pt;
+            font-family: "Arial", sans-serif;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <p>
+        <span>Здравствуйте, {{{name}}}!</span>
+    </p>
+    {{#each customContent}}
+        <p>{{this}}</p>
+    {{/each}}
+
+    <p style="padding-top: 1rem">
+            <span>
+        Если у вас возникнут какие-либо проблемы, пожалуйста,
+            свяжитесь с нами по адресу
+        <a href="mailto:{{{supportEmail}}}" target="_blank">{{{supportEmail}}}</a>.
+    </span>
+    </p>
+
+</div>
+
+
+<div class="signature">
+    <p>С уважением,</p>
+    <p>Команда T-Challenge</p>
+    <div style="padding-top: 0.5rem">
+        <a href="http://www.t-systems.ru" target="_blank"><img src="{{{logoPath}}}" height="30px"></a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+#outerGrid{
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+    background-color: #e20074;
+    height: 60px;
+}
+
+#desctopGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    width: 1024px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px){
+    #desctopGrid{
+        width: 767px;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.desctopButtons{
+    display: grid;
+    grid-template-columns: 110px 180px 110px;
+}
+
+.justRight{
+    display: grid;
+    justify-content: right;
+}
+
+#mobileGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+.dropdown-toggle::after{
+    display: none;
+}
+
+.on-bar-color{
+    color: white
+}
+
+.on-list-color{
+    color: #000000
+}
+
+.button-on-full {
+    background-color:#E20074;
+    border: none;
+    color: white;
+    display: inline-block;
+}

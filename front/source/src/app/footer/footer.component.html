@@ -1,0 +1,64 @@
+<div id = outerGrid>
+<!-- Desctop --------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <div *ngIf="!onMobile()" id = desctopGrid>
+
+        
+        <div class="centerLogo">
+            <a href="https://www.t-systems.com/ru/ru" target="_blank">
+                <img height="20px" src="./assets/images/t-systems-white.png" alt="T-Systems logo">
+            </a>
+
+            <div id = copirite class="centerLogo">© 2019 T-Systems Russia</div>
+        </div>
+
+
+        <div class="buttons">
+            <div>
+                <a class="footer-text" target="_blank" routerLink="/disclaimer">Пользовательское соглашение</a>
+            </div>
+            <div style="padding-left: 30px;">
+                <a class="footer-text" target="_blank" href="https://spb.hh.ru/employer/25"> Вакансии </a>
+            </div>
+        </div>
+                
+        <div class="justRight">
+            <div class="socialButtons">
+                <div>
+                    <div target="_blank" href="https://www.facebook.com/tsystemsrussia/"><img height="20px" src="./assets/images/facebook-icon.svg" alt="facebook-icon"></div>
+                </div>
+                <div>
+                    <a target="_blank" href="https://www.instagram.com/tsystemsrussia/"><img height="20px" src="./assets/images/instagram-icon.svg" alt="instagram-icon"></a>
+                </div>
+                <div>
+                    <a target="_blank" href="https://vk.com/tsystems"><img height="20px" src="./assets/images/vk-icon.svg" alt="vk-icon"></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- mobile ----------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <div *ngIf="onMobile()" id = mobileGrid>
+        <div>
+            <a class="footer-text" target="_blank" href="https://spb.hh.ru/employer/25"> Вакансии </a>
+        </div>
+
+        <div>
+            <a class="footer-text" target="_blank" routerLink="/disclaimer">Пользовательское соглашение</a>
+        </div>
+
+        <div class="footer-text">© 2019 T-Systems Russia</div>
+
+        <div class="footer-text">
+            <div class="d-inline-block ml-4 pt-1">
+                <a target="_blank" href="https://www.facebook.com/tsystemsrussia/"><img height="15px" src="./assets/images/facebook-icon.svg" alt="facebook-icon"></a>
+            </div>
+            <div class="d-inline-block mx-4">
+                <a target="_blank" href="https://www.instagram.com/tsystemsrussia/"><img height="15px" src="./assets/images/instagram-icon.svg" alt="instagram-icon"></a>
+            </div>
+            <div class="d-inline-block mr-4">
+                <a target="_blank" href="https://vk.com/tsystems"><img height="15px" src="./assets/images/vk-icon.svg" alt="vk-icon"></a>
+            </div>
+        </div>
+    </div>
+    
+</div>

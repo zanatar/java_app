@@ -1,0 +1,50 @@
+<div id="outerGrid">
+    <div id="innerGrid" *ngIf="event">
+
+        <span class="block-title">{{event.greeting}}</span>
+        
+        <span class="block-title">Заявка на тест</span>
+
+        <div class="form-group">
+            <label for="selectedSpecialization">Ваша специализация:</label>
+            <label *ngIf="availableSpecializations.length == 1">
+                    &nbsp;&nbsp; {{availableSpecializations[0].caption}}
+            </label>
+            <div *ngIf="availableSpecializations.length != 1" id="form">
+                <select [(ngModel)]="selectedSpecialization" id="selectedSpecialization" class="form-control"
+                        required="">
+                    <option *ngFor="let spec of availableSpecializations" [ngValue]="spec">{{spec.caption}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="selectedMaturity">Ваш уровень:</label>
+            <label *ngIf="availableSpecializations.length == 1">
+                    &nbsp;&nbsp; {{wordFormatter(availableMaturities[0])}}
+            </label>
+            <div *ngIf="availableSpecializations.length != 1" id="form">
+                <select [(ngModel)]="selectedMaturity" id="selectedMaturity" class="form-control" required="">
+                    <option *ngFor="let maturity of availableMaturities" [value]="maturity">
+                        {{wordFormatter(maturity)}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <button class="btn btn-lg btn-outline-primary vertical-align" (click)="onApplyClicked($event)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                    <path fill="none" d="M0 0H64.001V64H0z"/>
+                    <g>
+                        <path d="M44.003,11.002c-0.003-0.55-0.453-1-1.003-1l-4.999-0.001c0-3.313-2.685-6-5.998-6.001 c-3.313-0.001-6,2.684-6.001,5.998l-4.999-0.001c-0.55,0-1.001,0.45-1.001,1v6.994l24,0.006L44.003,11.002z M32,12 c-1.105,0-2-0.896-2-2c0-1.105,0.896-2,2-2c1.104,0,2,0.896,2,2C34.001,11.105,33.105,12,32,12z"/>
+                        <path d="M51.003,12h-5l-0.002,8.005l-28-0.005l0.002-8h-5c-1.1,0-2,0.9-2,2v46c0,1.1,0.9,2,2,2h38c1.1,0,2-0.9,2-2 V14C53.003,12.9,52.103,12,51.003,12z M33.504,50.99h-3v-2.834h3V50.99z M37.046,37.667l-2.335,2.348 c-0.784,0.782-1.213,1.819-1.213,2.925v1.777h-3v-1.777c0-1.907,0.742-3.699,2.09-5.044l2.335-2.348 c0.784-0.782,1.213-1.819,1.213-2.924s-0.43-2.143-1.21-2.924c-0.782-0.779-1.82-1.21-2.921-1.21 c-1.102,0-2.141,0.431-2.924,1.212c-0.779,0.779-1.209,1.818-1.209,2.922h-3c0-1.904,0.742-3.696,2.089-5.045 c1.352-1.348,3.143-2.089,5.044-2.089c1.901,0,3.692,0.741,5.042,2.087c1.349,1.351,2.09,3.142,2.09,5.047 C39.136,34.531,38.394,36.322,37.046,37.667z"/>
+                    </g>
+                </svg>
+                <span>Пройти тест</span>
+            </button>
+        </div>
+
+    </div>
+</div>

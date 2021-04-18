@@ -1,0 +1,162 @@
+
+stages:
+    - build
+    - test
+    - dockerize
+    - deploy
+    - publishing
+    - restore
+
+.template: 
+    - &tags
+        tags:
+            - localhost
+    - &before_script
+         before_script:
+           - export BRANCH=$(echo $CI_COMMIT_BRANCH | awk -F"-" '{print $1}')
+        
+build:
+    stage: build
+    image: gradle:jdk-openj9
+    cache:
+        paths:
+            - source/.gradle
+    <<: *tags
+    script: 
+        - cd source
+        - gradle build --build-cache
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - /builds/tchallenge-zanatar/tchallenge-backend/source/build/libs/*
+            - /builds/tchallenge-zanatar/tchallenge-backend/source/build/reports/tests/test* 
+    rules:
+        - changes:
+            - source/docker/*
+            - source/*
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+
+pages:
+    stage: test
+    needs:
+        - build
+    dependencies:
+        - build
+    <<: *tags
+    image: docker
+    script:
+        - mv /builds/tchallenge-zanatar/tchallenge-backend/source/build/reports/tests/test public/
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - public/
+    rules:
+        - changes:
+            - source/docker/*
+            - source/*
+
+
+dockerize:
+    image: docker:dind
+    stage: dockerize
+    services:
+      - name: docker:dind
+        entrypoint: ["env", "-u", "DOCKER_HOST"]
+        command: ["dockerd-entrypoint.sh"]
+    variables:
+        DOCKER_HOST: tcp://docker:2375/
+        DOCKER_DRIVER: overlay2
+        DOCKER_TLS_CERTDIR: ""
+    <<: *tags
+    needs:
+        - build
+    dependencies:
+        - build
+    <<: *before_script
+    script:
+        - docker login registry.gitlab.com -u zanatar -p $ACCESS_TOKEN
+        - cp /builds/tchallenge-zanatar/tchallenge-backend/source/build/libs/tchallenge-service.jar /builds/tchallenge-zanatar/tchallenge-backend/source/docker/tchallenge-service.jar
+        - docker build -t backend ./source/docker
+        - imagetag="$(docker inspect -f '{{ .Config.Labels.version}}' backend)"
+        - docker image tag backend registry.gitlab.com/tchallenge-zanatar/tchallenge-backend/backend-$BRANCH:$imagetag
+        - docker image tag backend registry.gitlab.com/tchallenge-zanatar/tchallenge-backend/backend-$BRANCH:latest
+        - docker push registry.gitlab.com/tchallenge-zanatar/tchallenge-backend/backend-$BRANCH:$imagetag
+        - docker push registry.gitlab.com/tchallenge-zanatar/tchallenge-backend/backend-$BRANCH:latest
+    rules:
+        - changes:
+            - source/docker/*
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+   
+deploy:from_charts:
+    stage: deploy
+    tags:
+        - t-sys_cloud
+    <<: *before_script
+    script:
+        - oc login https://openshift.devops.t-systems.ru:8443 -u zanatar -p $OC_PASS --insecure-skip-tls-verify
+        - oc project tchallenge-$BRANCH || oc new-project tchallenge-$BRANCH
+        - awk -F= '/version/ {print "imagetag:",$2}' source/docker/Dockerfile >> charts/values-$BRANCH.yaml
+        - helm upgrade -i backend ./charts/ --values ./charts/values-$BRANCH.yaml
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+        - when: always
+
+publishing:helm_repo_update:
+    stage: publishing
+    needs:
+        - deploy:from_charts
+    <<: *tags
+    <<: *before_script
+    image: registry.gitlab.com/zanatar/image-for-cronjob/helm-oc
+    script:
+        - git clone https://github.com/zanatar/t-system-tchallenge-helm-repo
+        - mv charts/values-$BRANCH.yaml charts/values.yaml
+        - awk -F= '/version/ {print "imagetag:",$2}' source/docker/Dockerfile >> charts/values.yaml
+        - helm package -u charts/
+        - cp backend* t-system-tchallenge-helm-repo/$BRANCH/
+        - cd t-system-tchallenge-helm-repo/$BRANCH/
+        - helm repo index . --url https://zanatar.github.io/t-system-tchallenge-helm-repo/$BRANCH
+        - git config --global user.email "leokern@rambler.ru"
+        - git config --global user.name "zanatar"
+        - git add *
+        - git commit -m "backend test message"
+        - git push https://zanatar:$GITHUB_ACCESS_TOKEN@github.com/zanatar/t-system-tchallenge-helm-repo.git
+    rules:
+        - changes:
+            - charts/*
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: never
+
+deploy:from_repo:
+    stage: deploy
+    tags:
+        - t-sys_cloud
+    <<: *before_script
+    script:
+        - oc login https://openshift.devops.t-systems.ru:8443 -u zanatar -p $OC_PASS --insecure-skip-tls-verify
+        - oc project tchallenge-$BRANCH || oc new-project tchallenge-$BRANCH
+        - helm repo remove $BRANCH || echo 1
+        - helm repo add $BRANCH https://zanatar.github.io/t-system-tchallenge-helm-repo/$BRANCH
+        - helm repo update
+        - export VERSION=$(awk -F:" " '/version/ {print $2}'  charts/Chart.yaml)
+        - helm upgrade -i backend $BRANCH/backend --version $VERSION --reset-values
+    when: manual
+
+restore_current_commit:
+    stage: restore
+    <<: *tags
+    image: registry.gitlab.com/zanatar/image-for-cronjob/helm-oc
+    <<: *before_script
+    script:
+        - git clone git@gitlab.com:tchallenge-zanatar/tchallenge-backend.git
+        - cd tchallenge-backend
+        - git checkout $CI_COMMIT_SHORT_SHA
+        - git checkout -b $BRANCH-$CI_COMMIT_SHORT_SHA
+        - git push origin $BRANCH-$CI_COMMIT_SHORT_SHA
+    when: manual
+
+
+

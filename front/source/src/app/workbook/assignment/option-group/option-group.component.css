@@ -1,0 +1,64 @@
+#outerGrid{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    width: 100%;
+}
+
+.button{
+    display: grid;
+    gap: 10px;
+    align-items: center;
+}
+
+#code{
+    display: grid;
+    grid-template-rows: 40px 300px 1fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+#text{
+    display: grid;
+    justify-items: center;
+}
+
+.codemirror{
+    display: grid;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-color: gray;
+}
+
+span.correct::before {
+    content: "\2714 ";
+    color: green;
+    font-size: 1.1em;
+}
+
+.custom-control-label::after {
+    top: 0.25rem;
+    left: -1.5rem;
+    /*height: 14px;*/
+}
+
+
+.incorrect-text {
+    color: black;
+    border-color: red;
+}
+
+.correct-text{
+    color: black;
+    border-color: green;
+}
+
+.tests span {
+    line-height: 1.4;
+}

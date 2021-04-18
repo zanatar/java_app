@@ -1,0 +1,14 @@
+{{- if .Values.route.create }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.release.name }}-route
+spec:
+  host: {{ .Values.route.host }}
+  path: {{ .Values.route.path }}
+  port:
+    targetPort: {{ .Values.route.port }}
+  to:
+    kind: Service
+    name: {{ .Values.release.name }}-deployment
+{{- end -}}

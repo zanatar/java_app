@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <style>
+            .content {
+                font-size: 11.0pt;
+                font-family: "Calibri", sans-serif;
+                color: #1f497d;
+            }
+
+            .signature {
+                padding-top: 2rem;
+                font-size: 8.0pt;
+                font-family: "Arial", sans-serif;
+                color: #666666;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="content">
+        <p>
+            <span>Здравствуйте, {{{name}}}!</span>
+        </p>
+        <p>
+            <span>Недавно вы запросили смену вашего пароля на T-Challenge.
+                Для завершения данного процесса, пожалуйста, перейдите по этой ссылке:</span>
+        </p>
+        <p>
+            <span>
+                <a href="{{{backlink}}}" target="_blank">{{{backlink}}}</a>
+            </span>
+        </p>
+        <p>
+            <span>Если вы не запрашивали новый пароль, вам не о чем беспокоиться -
+                просто проигнорируйте это письмо.</span>
+        </p>
+        <p>
+        <span>
+            Если ссылка выше не работает, попробуйте скопировать ее и вставить в адресную строку браузера.
+        </span>
+            <span>
+            <br>
+        Если у вас возникнут какие-либо проблемы, пожалуйста,
+            свяжитесь с нами по адресу<br>
+        <a href="mailto:{{{supportEmail}}}" target="_blank">{{{supportEmail}}}</a>.
+    </span>
+        </p>
+
+    </div>
+
+
+    <div class="signature">
+        <p>С уважением,</p>
+        <p>Команда T-Challenge</p>
+        <div style="padding-top: 0.5rem">
+            <a href="http://www.t-systems.ru" target="_blank"><img src="{{{logoPath}}}" height="30px"></a>
+        </div>
+    </div>
+    </body>
+</html>

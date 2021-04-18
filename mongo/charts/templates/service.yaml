@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.release.name }}-deployment
+  labels:
+    app: {{ .Values.appLabel }}
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '9216'
+    prometheus.io/probe: {{ .Values.release.name }}
+spec:
+    type: ClusterIP
+    selector:
+        app: {{ .Values.appLabel }}
+    ports:
+    - name: mongo
+      port: {{ .Values.service.mongo.servicePort }}
+      protocol: {{ .Values.service.mongo.protocol }}
+      targetPort: {{ .Values.service.mongo.targetPort }}
+    - name: prom
+      protocol: {{ .Values.service.prom.protocol }}
+      port: {{ .Values.service.prom.servicePort }}
+      targetPort: {{ .Values.service.prom.targetPort }}

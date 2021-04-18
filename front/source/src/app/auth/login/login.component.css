@@ -1,0 +1,63 @@
+#outerGrid{
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    height: 100%;
+}
+
+#innerGrid{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.form{
+    width: 310px;
+}
+
+#buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    width: 310px;
+    column-gap: 10px;
+    align-items: center;
+    justify-items: center;
+}
+
+#button{
+    width: 150px;
+}
+
+#socialsBlock{
+    display: grid;
+    grid-template-columns: 50px 45px 45px;
+    grid-template-rows: 60px;
+    align-items: center;
+    justify-items: center;
+}
+
+.alert {
+    padding: 5px;
+}
+
+.vk img {
+    width: 24px;
+    height: 24px;
+}
+
+#googleBtn img {
+    width: 24px;
+    height: 24px;
+}
+
+#googleBtn, .vk button {
+    background: transparent;
+    height: 45px;
+    width: 40px;
+    padding: 0;
+}
+
+.btn-lg {
+    font-size: 1.25rem;
+}

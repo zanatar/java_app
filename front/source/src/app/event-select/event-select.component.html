@@ -1,0 +1,31 @@
+<div id="outerGrid">
+    <div id="innerGrid">
+        <span class="block-title">Событие</span>
+        
+        <div class="form-group" id="form">
+            <select2 [cssImport]="true" [data]="[selectedEvent]" (valueChanged)="select($event)"
+                        [options]="selectOptions"
+                        id="selectEvent" required></select2>
+        </div>
+
+        <div>
+            <div class="text-center">
+                <label *ngIf="selectedEvent?.description">{{selectedEvent?.description}}</label>
+            </div>
+            <div class="text-center date-info">
+                <label *ngIf="selectedEvent">Действительно с: {{formatDate(selectedEvent.validFrom)}}</label>
+            </div>
+            <div class="text-center date-info">
+                <label *ngIf="selectedEvent">Действительно до: {{formatDate(selectedEvent.validUntil)}}</label>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-outline-primary vertical-align" (click)="this.onApplyClicked($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64">
+                <path fill="none" d="M0 0H64.001V64H0z"></path>
+                <path d="M23.048,49.219c-0.371,0-0.742-0.137-1.031-0.411L8.488,35.998c-0.602-0.569-0.628-1.519-0.058-2.12 c0.569-0.601,1.518-0.63,2.121-0.058l12.468,11.807L53.421,15.22c0.585-0.586,1.535-0.586,2.121,0c0.586,0.586,0.586,1.535,0,2.121 L24.108,48.78C23.816,49.073,23.432,49.219,23.048,49.219z"></path>
+            </svg>
+            <span>Выбрать</span>
+        </button>
+    </div>
+</div>

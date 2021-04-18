@@ -1,0 +1,77 @@
+<form [formGroup]="loginFormCtrl" (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" id="outerGrid">
+    <div id = innerGrid>
+
+        <h3>Вход для участников</h3>
+
+        <div>
+            <label>Email
+            <input name="email" type="email" class="form-control form"
+                    placeholder="example@mail.com"
+                    formControlName="email"
+                    ngModel
+                    required>
+            </label>
+            <div *ngIf="email.invalid && email.touched"
+                class="alert alert-danger">
+                <div *ngIf="email.errors.required">
+                    Необходимо заполнить email
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <label>Пароль
+            <input name="password" type="password" class="form-control form"
+                placeholder="*****"
+                ngModel
+                formControlName="password"
+                required>
+            </label>
+            <div *ngIf="password.invalid && password.touched"
+                    class="alert alert-danger">
+                <div *ngIf="password.errors.required">
+                    Требуется заполнить пароль
+                </div>
+            </div>
+        </div>
+
+        <div id = "buttons">
+            <div>
+                <button class="btn btn-lg btn-primary btn-block" routerLink="/signup" type="button" id = "buton">
+                    Регистрация
+                </button>
+            </div>
+            <div>
+                <button [disabled]="loginFormCtrl.invalid" class="btn btn-lg btn-primary btn-block" type="submit" id = "button">
+                    Войти
+                </button>
+            </div>
+        </div>
+
+        <div id = "socialsBlock">
+            <div>Войти:</div>
+            <div id="gSignInWrapper">
+                <button type="button" id="googleBtn" class="btn">
+                    <img src="/assets/images/google-icon.svg" alt="Google">
+                </button>
+            </div>
+            <div class="vk">
+                <button type="button" class="btn" onclick="VK.Auth.login(authInfo, 0)">
+                    <img src="/assets/images/vkcom.svg" alt="VK">
+                </button>
+            </div>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <a routerLink="/reset-password">Забыли пароль?</a>
+            </label>
+        </div>
+        
+        <div class="checkbox">
+            <label>
+                <a routerLink="/resend">Не получили письмо?</a>
+            </label>
+        </div>
+    </div>
+</form> 

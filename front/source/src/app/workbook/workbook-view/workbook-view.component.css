@@ -1,0 +1,60 @@
+#outerGrid{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+    padding-bottom: 20px;
+    height: 100%;
+}
+
+#waitingScreen{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+#innerGrid{
+    display: grid;
+    grid-template-rows: 1fr 70px;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+}
+
+#assignment{
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+@media all and (min-width: 320px) and (max-width: 425px){
+    #assignment{
+        width: 320px;
+    }
+}
+
+.sendButton{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    justify-items: center;
+}
+.workbook-summary-info .block-title {
+
+    font-size: 32px;
+    color: deeppink;
+}
+
+.vertical-align i{
+    font-size: 30px;
+}
+
+.vertical-align span {
+    font-size: 1.13em;
+}

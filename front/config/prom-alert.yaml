@@ -1,0 +1,55 @@
+apiVersion: v1
+data:
+  alertmanager.yml: >-
+    global:
+       slack_api_url: https://hooks.slack.com/services/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
+
+    route:
+      receiver: slack-notifications
+      group_interval: 1m
+      group_wait: 10s
+      repeat_interval: 3h
+
+    receivers:
+
+    - name: slack-notifications
+      slack_configs:
+      - channel: #general
+        icon_url: https://avatars3.githubusercontent.com/u/3380462
+        send_resolved: true
+        title_link: http://prometeus-prometheus-server-tchallenge-dev.openshift.devops.t-systems.ru/alerts
+        title: '{{ template "custom_title" . }}'
+        text: '{{ template "custom_slack_message" . }}'
+    #- name: slack-notifications
+
+    #  slack_configs:
+
+    #  - channel: #general
+
+    #    text: https://internal.myorg.net/wiki/alerts/{{ .GroupLabels.app }}/{{
+    .GroupLabels.alertname }}
+      
+    templates:
+
+    - /etc/config/notifications.tmpl
+  notifications.tmpl: "{{ define \"__single_message_title\" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}\r\n{{ define \"custom_title\" }}[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template \"__single_message_title\" . }}{{ end }}{{ end }}\r\n{{ define \"custom_slack_message\" }}\r\n{{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}\r\n{{ range .Alerts.Firing }}{{ .Annotations.description }}{{ end }}{{ range .Alerts.Resolved }}{{ .Annotations.description }}{{ end }}\r\n{{ else }}\r\n{{ if gt (len .Alerts.Firing) 0 }}\r\n*Alerts Firing:*\r\n{{ range .Alerts.Firing }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}\r\n{{ end }}{{ end }}\r\n{{ if gt (len .Alerts.Resolved) 0 }}\r\n*Alerts Resolved:*\r\n{{ range .Alerts.Resolved }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}\r\n{{ end }}{{ end }}\r\n{{ end }}\r\n{{ end }}"
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: prometeus
+    meta.helm.sh/release-namespace: tchallenge-dev
+  creationTimestamp: '2020-12-25T15:42:01Z'
+  labels:
+    app: prometheus
+    app.kubernetes.io/managed-by: Helm
+    chart: prometheus-11.12.1
+    component: alertmanager
+    heritage: Helm
+    release: prometeus
+  name: prometeus-prometheus-alertmanager
+  namespace: tchallenge-dev
+  resourceVersion: '8123094'
+  selfLink: >-
+    /api/v1/namespaces/tchallenge-dev/configmaps/prometeus-prometheus-alertmanager
+  uid: bac74c9a-46c7-11eb-98d9-005056829a01
+
