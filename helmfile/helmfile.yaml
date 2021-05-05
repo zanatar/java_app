@@ -1,0 +1,38 @@
+repositories:
+  - name: dev
+    url:  https://zanatar.github.io/t-system-tchallenge-helm-repo/dev
+  # - name: master
+    # url:  https://zanatar.github.io/t-system-tchallenge-helm-repo/master
+
+environments:
+  dev:
+    values:
+      - charts: dev
+  master:
+    values:
+      - charts: master
+  minikube:
+    values:
+      - charts: dev
+      - route: false
+      - ingress: true
+      - volumeClaimTemplates: false 
+      
+releases:
+  - name: front
+    chart: dev/front
+    set:
+      - name: route.create
+        value: false
+      - name: ingress.create
+        value: true
+  - name: backend
+    chart: dev/backend
+    set:
+      - name: route.create
+        value: false
+  - name: mongo
+    chart: dev/mongo
+    set:
+      - name: volumeClaimTemplates.create
+        value: false    

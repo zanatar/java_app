@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.release.name }}-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appLabel }}
+  serviceName: {{ .Values.release.serviceName }}
+  replicas: {{ .Values.release.replicaCount }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '9216'
+        prometheus.io/probe: {{ .Values.release.name }}
+      labels:
+        app: {{ .Values.appLabel }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.containers.secret }}
+     # terminationGracePeriodSeconds: 10
+      containers:
+      - name: {{ .Values.containers.name }}
+        image: {{ .Values.containers.image }}
+        args: ['--logpath', '/var/log/mongodb/mongodb.log']
+        ports:
+        - containerPort: {{ .Values.containers.port }}
+        livenessProbe: 
+          tcpSocket:
+            port: 27017              
+{{ toYaml .Values.livenessProbe | indent 10 }}                    
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+{{ toYaml .Values.readinessProbe | indent 10 }} 
+        volumeMounts:
+        - mountPath: {{ .Values.volumes.logstash.mountPath }}
+          name: {{ .Values.volumes.logstash.name }}
+        # - name: {{ .Values.pvc.name }}
+          # mountPath: {{ .Values.pvc.mountPath }}
+        - name: {{ .Values.configmap.name }}
+          mountPath: {{ .Values.configmap.mountPath }}
+
+      - name: {{ .Values.exporter.name }}
+        image: {{ .Values.exporter.image }}
+        volumeMounts:
+        - mountPath: {{ .Values.volumes.logstash.mountPath }}
+          name: {{ .Values.volumes.logstash.name }}
+        ports:
+        - containerPort: {{ .Values.exporter.port }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9216
+            scheme: HTTP
+{{ toYaml .Values.livenessProbe | indent 10 }}                    
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 9216
+            scheme: HTTP
+{{ toYaml .Values.readinessProbe | indent 10 }} 
+        # resources:
+        #   cpu: 100m
+        #   memory: 100Mi
+
+      - name: {{ .Values.promtail.name }}
+        image: {{ .Values.promtail.image }}
+        volumeMounts:
+        - mountPath: {{ .Values.volumes.logstash.mountPath }}
+          name: {{ .Values.volumes.logstash.name }}
+        - mountPath: {{ .Values.volumes.config.mountPath }}
+          name: {{ .Values.volumes.config.name }}
+          
+      volumes:
+      - name: {{ .Values.configmap.name }}
+        configMap:
+          defaultMode: {{ .Values.configmap.defaultMode }}
+          name:  {{ .Values.configmap.serviceName }}
+      - name: {{ .Values.volumes.logstash.name }}
+        emptyDir: {} 
+      - configMap:
+          defaultMode:  {{ .Values.volumes.config.defaultMode }}
+          name: {{ .Values.volumes.config.configMap }}
+        name: {{ .Values.volumes.config.name }}
+
+  # volumeClaimTemplates:
+  # - metadata:
+      # name: {{ .Values.pvc.name }}
+    # spec:
+      # accessModes: 
+        # - {{ .Values.pvc.accessModes }}
+      # storageClassName: {{ .Values.pvc.type }}
+      # resources: 
+        # requests:
+          # storage: {{ .Values.pvc.capacity }}
+  
+

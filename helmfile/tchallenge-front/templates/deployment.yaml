@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ .Values.release.name }}-deployment
+    labels:
+        app: {{ .Values.appLabel }}
+spec:
+    replicas: {{ .Values.release.replicaCount }}
+    selector:
+        matchLabels:
+            app: {{ .Values.appLabel }}
+    template:
+        metadata:
+          annotations:
+            prometheus.io/path: /metrics
+            prometheus.io/port: '9113'
+            prometheus.io/probe: {{ .Values.release.name }}
+          labels:
+            app: {{ .Values.appLabel }}
+        spec:
+            imagePullSecrets:
+                  - name: {{ .Values.containers.secret }}
+            volumes: 
+            - name: {{ .Values.volumes.logstash.name }}
+              emptyDir: {} 
+            - configMap:
+                  defaultMode:  {{ .Values.volumes.config.defaultMode }}
+                  name: {{ .Values.volumes.config.configMap }}
+              name: {{ .Values.volumes.config.name }}
+            # - name: logs
+            #  hostPath:
+            #     path: /var/log/nginx
+            # - configMap:
+            #     defaultMode: 420
+            #     name: promtail-front-dev-config
+            #   name: promtail
+            # - name: {{ .Values.volumes.logstash.name }}
+            #   persistentVolumeClaim:
+            #       claimName: {{ .Values.pvc.name }}
+            containers:
+                - env:
+                  - name: apiBaseUrl
+                    value: {{.Values.values.apiBaseUrl }}
+                  - name: clientBaseUrl
+                    value: {{.Values.values.clientBaseUrl }}
+                  # - name: production
+                    # value: {{.Values.values.production }}
+                  name: {{ .Values.containers.name }}
+                  image: {{ .Values.containers.image }}
+                  volumeMounts:  
+                  - name: {{ .Values.volumes.logstash.name }}
+                    mountPath: {{ .Values.volumes.logstash.mountPath.nginx }}
+                  ports:
+                    - containerPort: {{ .Values.containers.port }}
+                  livenessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.livenessProbe | indent 20 }}                    
+                  readinessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                      scheme: HTTP
+{{ toYaml .Values.readinessProbe | indent 20 }} 
+                
+                - env:
+                  - name: nginx.scrape-uri
+                    value: http://localhost:8080/stub_status
+                  name: {{ .Values.exporter.name }}
+                  image: {{ .Values.exporter.image }}
+                  ports:
+                    - containerPort: {{ .Values.exporter.port }}
+                  livenessProbe:
+                    httpGet:
+                      path: /metrics
+                      port: 9113
+                      scheme: HTTP
+{{ toYaml .Values.livenessProbe | indent 20 }}                    
+                  readinessProbe:
+                    httpGet:
+                      path: /metrics
+                      port: 9113
+                      scheme: HTTP
+{{ toYaml .Values.readinessProbe | indent 20 }} 
+                                
+                - name: {{ .Values.promtail.name }}
+                  image: {{ .Values.promtail.image }}
+                  volumeMounts:
+                  - mountPath: {{ .Values.volumes.logstash.mountPath.nginx }}
+                    name: {{ .Values.volumes.logstash.name }}
+                  - mountPath: {{ .Values.volumes.config.mountPath }}
+                    name: {{ .Values.volumes.config.name }} 
+

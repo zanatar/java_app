@@ -1,0 +1,10 @@
+repositories:
+- name: tchallenge
+  url:  https://zanatar.github.io/t-system-tchallenge-helm-repo/
+releases:
+- name: front
+  chart: tchallenge-front/
+- name: backend
+  chart: tchallenge-backend/
+- name: mongo
+  chart: tchallenge-mongo/

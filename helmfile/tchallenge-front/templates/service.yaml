@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.appLabel }}
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '9113'
+    prometheus.io/probe: {{ .Values.release.name }}
+  name: {{ .Values.release.name }}-deployment
+spec:
+    selector:
+      app: {{ .Values.appLabel }}
+    ports:
+    - name: front 
+      port: {{ .Values.service.front.servicePort }}
+      protocol: {{ .Values.service.front.protocol }}
+      targetPort: {{ .Values.service.front.targetPort }}
+    - name: prom
+      protocol: {{ .Values.service.prom.protocol }}
+      port: {{ .Values.service.prom.servicePort }}
+      targetPort: {{ .Values.service.prom.targetPort }}

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: backend-dev-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: backend-dev
+  replicas: 2
+  template:
+    metadata:      
+      labels:
+        app: backend-dev
+    spec:
+	  volumes:
+      - name: logs
+        emptyDir: {} 
+      imagePullSecrets:
+      - name: gitlab
+     # terminationGracePeriodSeconds: 10
+      containers:
+      - name: backend
+        image: registry.gitlab.com/tchallenge-zanatar/tchallenge-backend/backend-dev
+        ports:
+        - containerPort: 4567
+		volumeMounts:
+        - mountPath: /backend/logs
+          name: logs
+
+     
